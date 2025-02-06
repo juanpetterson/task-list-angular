@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Task } from '../models/Task';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
+
+import { Task } from '../models/Task';
 import { StorageService } from './storage.service';
 import { FILTER_OPTIONS } from '../constants/filter';
 

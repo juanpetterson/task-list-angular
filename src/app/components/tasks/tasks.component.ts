@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
+
 import { Task } from '../../models/Task';
 import { TaskService } from '../../services/task.service';
-import { Subscription } from 'rxjs';
 import { FILTER_OPTIONS } from '../../constants/filter';
-import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-tasks',
