@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
+import { Task } from '../models/Task';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-
-import { Task } from '../models/Task';
+import { StorageService } from './storage.service';
 import { FILTER_OPTIONS } from '../constants/filter';
 
 @Injectable({
@@ -11,9 +11,16 @@ import { FILTER_OPTIONS } from '../constants/filter';
 export class TaskService {
   private tasks: Task[] = [];
   private filterSubject = new BehaviorSubject<string>(FILTER_OPTIONS.ALL);
-  private tasksSubject = new BehaviorSubject<Task[]>(this.tasks);
+  private tasksSubject: BehaviorSubject<Task[]>;
 
-  constructor() { }
+  constructor(private storageService: StorageService) {
+    this.tasks = this.storageService.get('tasks') || [];
+    this.tasksSubject = new BehaviorSubject<Task[]>(this.tasks);
+
+    this.tasksSubject.subscribe(tasks => {
+      this.storageService.set('tasks', tasks);
+    });
+  }
 
   getTasks(): Observable<Task[]> {
     return this.filterSubject.pipe(
