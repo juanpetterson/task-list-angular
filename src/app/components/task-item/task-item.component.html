@@ -1,0 +1,23 @@
+<div *ngIf="task" class="task-item" [ngClass]="{ 'task-item--completed': task.completed }">
+  <div>
+    <input 
+      type="checkbox"
+      name="task-input"
+      class="task-item__input"
+      [id]="'task-input-' + task.id"
+      [checked]="task.completed"
+      (click)="handleToggleTask(task.id)"
+    />
+    <label 
+      [for]="'task-input-' + task.id"
+      class="task-item__name"
+    >
+      {{ task.name }}
+    </label>
+  </div>
+  <app-button
+    [text]="'Remove'"
+    [style]="'secondary'"
+    (btnClick)="handleRemoveTask(task.id)"
+  ></app-button>
+</div>

@@ -1,0 +1,22 @@
+.task-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #e1eaf9;
+  margin: 8px 4px;
+  padding: 8px;
+
+  &--completed {
+    text-decoration: line-through;
+    background-color: #d0f0c0;
+  }
+
+  &__name,
+  &__input {
+    margin-right: 8px;
+  }
+
+  &__name {
+    word-break: break-all;
+  }
+}
