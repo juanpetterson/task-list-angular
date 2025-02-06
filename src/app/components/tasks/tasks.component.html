@@ -1,0 +1,18 @@
+<div class="tasks" >
+  <header>
+    <h1>Tasks List</h1>
+    
+    <input type="text" placeholder="Add new task" [(ngModel)]="text" (keyup.enter)="addTask()">
+    <button (click)="addTask()">Add</button>
+  </header>
+
+  <div>
+    <ul>
+      <li *ngFor="let task of tasks">
+        <input type="checkbox" [(ngModel)]="task.completed" (change)="completeTask(task.id)">
+        <span [ngClass]="{'completed': task.completed}">{{ task.text }}</span>
+        <button (click)="removeTask(task.id)">Remove</button>
+      </li>
+    </ul>
+  </div>
+</div>
