@@ -1,45 +1,57 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 
-interface Task {
-  id: number;
-  text: string;
-  completed: boolean;
-}
+import { Task } from '../../models/Task';
+import { TaskService } from '../../services/task.service';
 
 @Component({
   selector: 'app-tasks',
   templateUrl: './tasks.component.html',
   styleUrls: ['./tasks.component.scss']
 })
-export class TasksComponent implements OnInit {
-  @Input() text: string = '';
+export class TasksComponent implements OnInit, OnDestroy {
+  @Input() text = '';
+  tasks: Task[] = [];
 
-  tasks: Task[] = []
+  private subscription: Subscription = new Subscription();
 
-  constructor() { }
+  constructor(private taskService: TaskService) { }
 
   ngOnInit(): void {
+    this.subscription.add(this.taskService.getTasks().subscribe(tasks => {
+      this.tasks = tasks;
+    }));
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   addTask() {
-    this.tasks.push({
+    if (!this.text) {
+      return;
+    }
+
+    const newTask: Task = {
       id: new Date().getTime(),
-      text: this.text,
+      name: this.text,
       completed: false
-    });
+    };
+
+    this.taskService.addTask(newTask);
+
     this.text = '';
   }
 
   removeTask(id: number) {
-    this.tasks = this.tasks.filter(task => task.id !== id);
+    this.taskService.removeTask(id);
   }
 
-  completeTask(id: number) {
-    this.tasks = this.tasks.map(task => {
-      if (task.id === id) {
-        task.completed = !task.completed;
-      }
-      return task;
-    });
+  toggleTask(id: number) {
+    this.taskService.toggleTask(id);
+  }
+
+  trackByTaskId(_index: number, task: Task): number {
+    return task.id;
   }
 }
